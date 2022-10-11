@@ -1,0 +1,45 @@
+.container {
+  height: 100px;
+  padding: 0px 2.5rem;
+  background-color: var(--cheesarella_red);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.list {
+  padding: 0;
+  display: flex;
+  list-style: none;
+  cursor: pointer;
+  align-items: center;
+  color: var(--cheesarella_white);
+}
+
+.link {
+  padding-left: 2rem;
+}
+
+.link button {
+  all: unset;
+  margin-left: 1rem;
+}
+
+.link a,
+.link button {
+  color: var(--cheesarella_white);
+  text-decoration: none;
+  padding: 0.8rem;
+  font-weight: bold;
+}
+
+.link a:hover,
+.link a:focus,
+.link button:hover,
+.link button:focus {
+  background-color: #ffffff20;
+  border-radius: 6%;
+}
