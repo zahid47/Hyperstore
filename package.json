@@ -1,7 +1,7 @@
 {
-  "name": "pizza-app-backend",
+  "name": "hyperstore-backend",
   "version": "0.0.1",
-  "description": "yet another pizza shop backend",
+  "description": "hyperstore - e-commerce platform for small businesses",
   "main": "server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
@@ -13,17 +13,12 @@
     "build": "tsc",
     "start": "node build/src/server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zahid47/pizza-app.git"
-  },
   "keywords": [],
   "author": "zahid <epiczahid@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zahid47/IceCreamApi/issues"
   },
-  "homepage": "https://github.com/zahid47/pizza-app#readme",
   "dependencies": {
     "argon2": "^0.28.7",
     "body-parser": "^1.20.0",

@@ -15,7 +15,7 @@ export const signToken = (
 ) => {
   const options = {
     expiresIn: expiry,
-    issuer: "pizza-app",
+    issuer: "hyperstore",
     audience: userId,
   };
   payload.role = role;

@@ -189,7 +189,7 @@ export const createCheckoutSessionController = async (
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Pizza",
+              name: "Product",
             },
             unit_amount: (await calculateTotal(products)) * 100, //converting to cents
           },

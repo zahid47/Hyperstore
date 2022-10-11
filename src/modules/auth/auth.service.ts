@@ -89,7 +89,7 @@ export const generateToken = (userId: string, task: "VERIFY" | "RESET") => {
 
     const options = {
       expiresIn: ttl,
-      issuer: "pizza-app",
+      issuer: "hyperstore",
       audience: userId,
     };
 

@@ -11,9 +11,9 @@ const constructMsg = (
     case "VERIFY":
       const verifyUrl = `${process.env.HOST}:${process.env.PORT}/api/v1/user/verify/email/${token}`;
       return {
-        from: `Pizza App <${process.env.ETHEREAL_EMAIL}>`,
+        from: `Hyperstore <${process.env.ETHEREAL_EMAIL}>`,
         to: `Recipient <${recipientEmail}>`,
-        subject: `Verify your pizza app email`,
+        subject: `Verify your hyperstore email`,
         text: `Please verify your account using this link: ${verifyUrl}. It will expire in 1 day.`,
         html: `<p><a href=${verifyUrl}>Click here</a> to verify your account. The link will expire in 1 day.</p>`,
       };
@@ -21,9 +21,9 @@ const constructMsg = (
       // FIXME: change host to client host
       const resetUrl = `${process.env.HOST}:${process.env.PORT}/api/v1/auth/reset-pass/${token}`;
       return {
-        from: `Pizza App <${process.env.ETHEREAL_EMAIL}>`,
+        from: `Hyperstore <${process.env.ETHEREAL_EMAIL}>`,
         to: `Recipient <${recipientEmail}>`,
-        subject: `Reset your pizza app password`,
+        subject: `Reset your hyperstore password`,
         text: `Please reset your password using this link: ${resetUrl}. It will expire in 1 day.`,
         html: `<p><a href=${resetUrl}>Click here</a> to reset your password. The link will expire in 1 day.</p>`,
       };
