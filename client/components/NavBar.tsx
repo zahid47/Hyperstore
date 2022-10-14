@@ -32,6 +32,7 @@ export default function NavBar() {
         const user = {
           name: response.data.name,
           role: response.data.role,
+          storeId: response.data.storeId || null,
         };
 
         setUser(user);
@@ -63,16 +64,20 @@ export default function NavBar() {
         <li>
           {user.name ? (
             <>
-              <li className="hidden lg:block">
-                <Link href={"/cart"} passHref>
-                  <a className="rounded-lg px-3 py-2" href="/">
-                    Cart ({cartQty})
-                  </a>
-                </Link>
-              </li>
-              <Link href={"/orders"} passHref>
-                <a className="rounded-lg px-3 py-2">My Orders</a>
-              </Link>
+              {!user.storeId && (
+                <>
+                  <Link href={"/cart"} passHref>
+                    <a className="rounded-lg px-3 py-2" href="/">
+                      Cart ({cartQty})
+                    </a>
+                  </Link>
+
+                  <Link href={"/orders"} passHref>
+                    <a className="rounded-lg px-3 py-2">My Orders</a>
+                  </Link>
+                </>
+              )}
+
               <button className="rounded-lg px-3 py-2" onClick={logOut}>
                 Log Out
               </button>
@@ -80,11 +85,11 @@ export default function NavBar() {
           ) : (
             <>
               <Link href={"/login"} passHref>
-              <a className="rounded-lg px-3 py-2">Login</a>
-            </Link>
+                <a className="rounded-lg px-3 py-2">Login</a>
+              </Link>
               <Link href={"/open-shop"} passHref>
-              <a className="rounded-lg px-3 py-2">Open a shop</a>
-            </Link>
+                <a className="rounded-lg px-3 py-2">Open a shop</a>
+              </Link>
             </>
           )}
         </li>

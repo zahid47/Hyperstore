@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 
+
 * {
   margin: 0;
   padding: 0;
@@ -12,8 +12,8 @@
 :root {
   --cheesarella_gray: #303030;
   --cheesarella_white: white;
-  --cheesarella_red: #be0c29;
-  --cheesarella_red_dark: #9a0a22;
+  --cheesarella_red: #7c3aed;
+  --cheesarella_red_dark: #5b21b6;
 }
 
 html {
@@ -32,4 +32,4 @@ button:disabled {
   cursor: not-allowed;
   color: #9d9d9d;
   color: var(--cheesarella_white);
-} */
+}

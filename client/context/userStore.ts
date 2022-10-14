@@ -1,5 +1,5 @@
 import create from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 
 interface userType {
   name?: string;
@@ -12,10 +12,13 @@ interface userStateType {
 }
 
 const useUserStore = create<userStateType>()(
-  devtools((set) => ({
-    user: {},
-    setUser: (user) => set(() => ({ user })),
-  }))
+  devtools(
+    persist((set) => ({
+      user: {},
+      setUser: (user) => set(() => ({ user })),
+    })),
+    { name: "user" }
+  )
 );
 
 export default useUserStore;
