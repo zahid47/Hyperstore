@@ -67,7 +67,7 @@ export default function NavBar() {
               {!user.storeId && (
                 <>
                   <Link href={"/cart"} passHref>
-                    <a className="rounded-lg px-3 py-2" href="/">
+                    <a className="rounded-lg px-3 py-2">
                       Cart ({cartQty})
                     </a>
                   </Link>

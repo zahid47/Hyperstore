@@ -21,7 +21,7 @@ export default function Orders({ orders }: any) {
     if (router.query.success === "true") {
       clearCart();
     }
-  }, []);
+  }, [clearCart, router.query.success]);
 
   useEffect(() => {
     setOrdersState(orders);
