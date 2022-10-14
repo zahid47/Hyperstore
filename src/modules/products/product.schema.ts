@@ -23,7 +23,7 @@ export const getProductsSchema = object({
     limit: string().optional(),
     page: string().optional(),
     searchTerm: string().optional(),
-    storeId: string({ required_error: "storeId is required" }),
+    store_slug: string({ required_error: "store_slug is required" }),
   }),
 });
 

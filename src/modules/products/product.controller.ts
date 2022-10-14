@@ -17,7 +17,7 @@ import {
 } from "./product.schema";
 import createError from "../../utils/createError";
 import { getRedis, setRedis } from "../../utils/redis";
-import { findStore } from "../stores/store.service";
+import { findStore, findStoreBySlug } from "../stores/store.service";
 
 export const createProductController = async (
   req: Request<{}, {}, createProductInput["body"]>,
@@ -77,8 +77,8 @@ export const getProductsController = async (
   next: NextFunction
 ) => {
   try {
-    const storeId = req.query.storeId as string;
-    const store = await findStore(storeId);
+    const store_slug = req.query.store_slug as string;
+    const store = await findStoreBySlug(store_slug);
     if (!store)
       return next(createError(404, "getting products", "Store not found"));
 
@@ -92,7 +92,7 @@ export const getProductsController = async (
       skip = limit * (parseInt(req.query.page) - 1);
     }
     const query = filterQueryBuilder(req.query);
-    const products = await findProducts(query, storeId,  limit, skip);
+    const products = await findProducts(query, store._id,  limit, skip);
     return res.status(200).json(products);
   } catch (err: any) {
     log.error(err);

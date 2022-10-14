@@ -20,6 +20,15 @@ export const findStore = async (id: string) => {
   }
 };
 
+export const findStoreBySlug = async (slug: string) => {
+  try {
+    return await Store.findOne({ slug: slug });
+    // skipcq
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
 export const findStores = async (
   query: object,
   limit: number,
