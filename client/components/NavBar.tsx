@@ -60,17 +60,16 @@ export default function NavBar() {
       </Link>
 
       <ul className="flex items-center gap-2 text-sm font-medium text-gray-500">
-        <li className="hidden lg:block">
-          <Link href={"/cart"} passHref>
-            <a className="rounded-lg px-3 py-2" href="/">
-              Cart ({cartQty})
-            </a>
-          </Link>
-        </li>
-
         <li>
           {user.name ? (
             <>
+              <li className="hidden lg:block">
+                <Link href={"/cart"} passHref>
+                  <a className="rounded-lg px-3 py-2" href="/">
+                    Cart ({cartQty})
+                  </a>
+                </Link>
+              </li>
               <Link href={"/orders"} passHref>
                 <a className="rounded-lg px-3 py-2">My Orders</a>
               </Link>
@@ -79,9 +78,14 @@ export default function NavBar() {
               </button>
             </>
           ) : (
-            <Link href={"/login"} passHref>
+            <>
+              <Link href={"/login"} passHref>
               <a className="rounded-lg px-3 py-2">Login</a>
             </Link>
+              <Link href={"/open-shop"} passHref>
+              <a className="rounded-lg px-3 py-2">Open a shop</a>
+            </Link>
+            </>
           )}
         </li>
       </ul>

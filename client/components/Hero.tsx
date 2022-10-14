@@ -15,7 +15,7 @@ export default function Hero() {
             Just give us a name, add your products and you are ready to go.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href="/get-started" passHref>
+            <Link href="/open-shop" passHref>
               <a className="block w-full rounded bg-purple-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-purple-700 focus:outline-none focus:ring active:bg-purple-500 sm:w-auto">
                 OPEN A SHOP
               </a>

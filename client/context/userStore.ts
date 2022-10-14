@@ -3,6 +3,7 @@ import { devtools } from "zustand/middleware";
 
 interface userType {
   name?: string;
+  storeId?: string;
 }
 
 interface userStateType {
