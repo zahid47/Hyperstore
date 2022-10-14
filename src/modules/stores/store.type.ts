@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 export interface storeInputType {
   name: string;
+  slug: string;
   description?: string;
   logo?: string;
   primaryColor?: string;

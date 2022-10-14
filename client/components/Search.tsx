@@ -24,7 +24,7 @@ export default function Search({ search, setSearch, setProducts }: any) {
       <form>
         <input
           className={styles.input}
-          placeholder="Butterscotch"
+          placeholder="Search for a product..."
           type="text"
           onChange={(e) => {
             setSearch(e.target.value);
