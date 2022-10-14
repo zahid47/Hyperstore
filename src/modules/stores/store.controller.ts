@@ -1,30 +1,30 @@
 import { Request, Response, NextFunction } from "express";
 import {
-  createProduct,
-  findProducts,
-  findAndDeleteProduct,
-  findAndUpdateProduct,
-  findProduct,
-} from "./product.service";
+  createStore,
+  findStores,
+  findAndDeleteStore,
+  findAndUpdateStore,
+  findStore,
+} from "./store.service";
 import { filterQueryBuilder } from "../../utils/filterQueryBuilder";
 import log from "../../utils/logger";
 import {
-  createProductInput,
-  deleteProductInput,
-  getProductInput,
-  getProductsInput,
-  updateProductInput,
-} from "./product.schema";
+  createStoreInput,
+  deleteStoreInput,
+  getStoreInput,
+  getStoresInput,
+  updateStoreInput,
+} from "./store.schema";
 import createError from "../../utils/createError";
 import { getRedis, setRedis } from "../../utils/redis";
 
-export const createProductController = async (
-  req: Request<{}, {}, createProductInput["body"]>,
+export const createStoreController = async (
+  req: Request<{}, {}, createStoreInput["body"]>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const product = await createProduct(req.body);
+    const product = await createStore(req.body);
     return res.status(201).json(product);
   } catch (err: any) {
     log.error(err);
@@ -32,22 +32,22 @@ export const createProductController = async (
   }
 };
 
-export const getProductController = async (
-  req: Request<getProductInput["params"]>,
+export const getStoreController = async (
+  req: Request<getStoreInput["params"]>,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
 
-    const cachedProduct = await getRedis(id);
+    const cachedStore = await getRedis(id);
 
     let product = null;
 
-    if (cachedProduct) {
-      product = JSON.parse(cachedProduct);
+    if (cachedStore) {
+      product = JSON.parse(cachedStore);
     } else {
-      product = await findProduct(id);
+      product = await findStore(id);
       await setRedis(id, JSON.stringify(product));
     }
 
@@ -66,8 +66,8 @@ export const getProductController = async (
   }
 };
 
-export const getProductsController = async (
-  req: Request<{}, {}, {}, getProductsInput["query"]>,
+export const getStoresController = async (
+  req: Request<{}, {}, {}, getStoresInput["query"]>,
   res: Response,
   next: NextFunction
 ) => {
@@ -82,7 +82,7 @@ export const getProductsController = async (
       skip = limit * (parseInt(req.query.page) - 1);
     }
     const query = filterQueryBuilder(req.query);
-    const products = await findProducts(query, limit, skip);
+    const products = await findStores(query, limit, skip);
     return res.status(200).json(products);
   } catch (err: any) {
     log.error(err);
@@ -90,15 +90,14 @@ export const getProductsController = async (
   }
 };
 
-export const updateProductController = async (
-  req: Request<updateProductInput["params"], {}, updateProductInput["body"]>,
+export const updateStoreController = async (
+  req: Request<updateStoreInput["params"], {}, updateStoreInput["body"]>,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
-
-    const product = await findAndUpdateProduct(id, req.body);
+    const product = await findAndUpdateStore(id, req.body);
 
     if (!product)
       return next(
@@ -116,15 +115,15 @@ export const updateProductController = async (
   }
 };
 
-export const deleteProductController = async (
-  req: Request<deleteProductInput["params"]>,
+export const deleteStoreController = async (
+  req: Request<deleteStoreInput["params"]>,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
 
-    const product = await findAndDeleteProduct(id);
+    const product = await findAndDeleteStore(id);
 
     if (!product)
       return next(

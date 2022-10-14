@@ -4,17 +4,17 @@ export const createProductSchema = object({
   body: object({
     name: string({ required_error: "product name is required" }),
     description: string().optional(),
-    // images: string().url("Image must be an URL").optional(),
-    prices: string(), // it is a JSON.stringify string of the prices object
-    // prices: array(
-    //   object(
-    //     {
-    //       price: number({ required_error: "price value is required" }),
-    //       option: string({ required_error: "option text is required" }),
-    //     },
-    //     { required_error: "price information is required" }
-    //   )
-    // ),
+    storeId: string({ required_error: "storeId is required" }),
+    images: array(string().url("Image must be an URL")).optional(),
+    prices: array(
+      object(
+        {
+          price: number({ required_error: "price value is required" }),
+          option: string({ required_error: "option text is required" }),
+        },
+        { required_error: "price information is required" }
+      )
+    ),
   }),
 });
 
@@ -39,14 +39,13 @@ export const updateProductSchema = object({
   body: object({
     name: string().optional(),
     description: string().optional(),
-    // images: string().url("Image must be an URL").optional(),
-    prices: string().optional(),
-    // prices: array(
-    //   object({
-    //     price: number({ required_error: "price value is required" }),
-    //     option: string({ required_error: "option text is required" }),
-    //   })
-    // ).optional(),
+    images: string().url("Image must be an URL").optional(),
+    prices: array(
+      object({
+        price: number({ required_error: "price value is required" }),
+        option: string({ required_error: "option text is required" }),
+      })
+    ).optional(),
   }),
 });
 

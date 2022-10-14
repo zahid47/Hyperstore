@@ -5,7 +5,7 @@ export interface productInputType {
   slug?: string;
   description?: string;
   images?: string[];
-  storeId: mongoose.Schema.Types.ObjectId,
+  storeId: string,
   prices: {
     price: number;
     option: string;

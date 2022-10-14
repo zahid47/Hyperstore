@@ -10,6 +10,7 @@ import limiter from "../middlewares/rateLimit";
 import healthcheck from "../modules/healthcheck/healthcheck.route";
 import user from "../modules/users/user.route";
 import auth from "../modules/auth/auth.route";
+import store from "../modules/stores/store.route";
 import product from "../modules/products/product.route";
 import order from "../modules/orders/order.route";
 
@@ -35,6 +36,7 @@ app.get("/", (_req: Request, res: Response) => {
 app.use("/api/v1/healthcheck", healthcheck);
 app.use("/api/v1/user", user);
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/store", store);
 app.use("/api/v1/product", product);
 app.use("/api/v1/order", order);
 
