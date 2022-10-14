@@ -5,9 +5,6 @@ export const createProductSchema = object({
     name: string({ required_error: "product name is required" }),
     description: string().optional(),
     // images: string().url("Image must be an URL").optional(),
-    ingredients: string().optional(),
-    category: string().optional(),
-    isVegan: string().optional(),
     prices: string(), // it is a JSON.stringify string of the prices object
     // prices: array(
     //   object(
@@ -18,13 +15,6 @@ export const createProductSchema = object({
     //     { required_error: "price information is required" }
     //   )
     // ),
-    extraIngredients: array(
-      object({
-        name: string({ required_error: "ingredient name is required" }),
-        price: number({ required_error: "ingredient price is required" }),
-      })
-    ).optional(),
-    tags: string().optional(),
   }),
 });
 
@@ -33,8 +23,6 @@ export const getProductsSchema = object({
     limit: string().optional(),
     page: string().optional(),
     searchTerm: string().optional(),
-    isVegan: boolean().optional(),
-    category: string().optional(),
   }),
 });
 
@@ -52,9 +40,6 @@ export const updateProductSchema = object({
     name: string().optional(),
     description: string().optional(),
     // images: string().url("Image must be an URL").optional(),
-    ingredients: string().optional(),
-    category: string().optional(),
-    isVegan: string().optional(),
     prices: string().optional(),
     // prices: array(
     //   object({
@@ -62,13 +47,6 @@ export const updateProductSchema = object({
     //     option: string({ required_error: "option text is required" }),
     //   })
     // ).optional(),
-    extraIngredients: array(
-      object({
-        name: string({ required_error: "ingredient name is required" }),
-        price: number({ required_error: "ingredient price is required" }),
-      })
-    ).optional(),
-    tags: string().optional(),
   }),
 });
 

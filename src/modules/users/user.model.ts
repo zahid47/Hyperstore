@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, lowercase: true, unique: true },
     verified: { type: Boolean, default: false },
     password: { type: String, required: true },
+    storeId: { type: mongoose.Schema.Types.ObjectId, ref: "Store" },
     phone: { type: String },
     address: {
       addressLine: String,
@@ -23,7 +24,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  const user = this as userDocument; // skipcq
+  const user = this as unknown as userDocument; // skipcq
   if (!user.isModified("password")) return next();
 
   const hash = await argon2.hash(user.password);

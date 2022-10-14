@@ -5,18 +5,11 @@ export interface productInputType {
   slug?: string;
   description?: string;
   images?: string[];
-  ingredients?: string[];
-  category?: string;
-  isVegan?: boolean;
+  storeId: mongoose.Schema.Types.ObjectId,
   prices: {
     price: number;
     option: string;
   }[];
-  extraIngredients?: {
-    name: string;
-    price: number;
-  }[];
-  tags?: string[];
 }
 
 export interface productDocument extends productInputType, mongoose.Document {

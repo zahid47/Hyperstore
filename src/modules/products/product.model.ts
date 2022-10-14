@@ -5,11 +5,9 @@ const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     slug: { type: String },
+    storeId: { type: mongoose.Schema.Types.ObjectId, ref: "Store" },
     description: String,
     images: [String],
-    ingredients: [String],
-    category: String,
-    isVegan: { type: Boolean, default: false },
     prices: {
       type: [
         {
@@ -19,20 +17,13 @@ const productSchema = new mongoose.Schema(
       ],
       required: true,
     },
-    extraIngredients: [
-      {
-        name: { type: String, required: true },
-        price: { type: Number, required: true },
-      },
-    ],
-    tags: [String],
   },
 
   { timestamps: true }
 );
 
 productSchema.pre("save", function (next) {
-  const product = this as productDocument; // skipcq
+  const product = this as unknown as productDocument; // skipcq
   if (!product.isModified("name")) return next();
 
   product.slug = product.name.replaceAll(" ", "-");

@@ -4,6 +4,7 @@ import { orderDocument } from "./order.type";
 const orderSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    storeId: { type: mongoose.Schema.Types.ObjectId, ref: "Store", required: true },
     products: [
       {
         product: {
@@ -35,8 +36,7 @@ const orderSchema = new mongoose.Schema(
       enum: [
         "pending",
         "confirmed",
-        "cooking",
-        "on the way",
+        "processing",
         "delivered",
         "cancelled",
       ],

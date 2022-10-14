@@ -5,6 +5,7 @@ export interface userInputType {
   email: string;
   password: string;
   phone?: string;
+  storeId: mongoose.Schema.Types.ObjectId,
   address?: {
     addressLine?: string;
     city?: string;
