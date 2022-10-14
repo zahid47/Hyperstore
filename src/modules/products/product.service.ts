@@ -22,11 +22,12 @@ export const findProduct = async (id: string) => {
 
 export const findProducts = async (
   query: object,
+  storeId: string,
   limit: number,
   skip: number
 ) => {
   try {
-    return await Product.find(query).limit(limit).skip(skip);
+    return await Product.find({ ...query, storeId }).limit(limit).skip(skip);
     // skipcq
   } catch (err: any) {
     throw new Error(err);

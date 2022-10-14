@@ -20,6 +20,7 @@ import {
 } from "./order.service";
 import Stripe from "stripe";
 import { verifyToken } from "../../utils/jwt";
+import { findStore } from "../stores/store.service";
 
 export const createOrderController = async (
   req: Request<{}, {}, createOrderInput["body"]>,
@@ -27,6 +28,10 @@ export const createOrderController = async (
   next: NextFunction
 ) => {
   try {
+    const storeId = req.query.storeId as string;
+    const store = await findStore(storeId);
+    if (!store) return next(createError(404, "creating order", "Store not found"));
+
     const orderDetails = { ...req.body, user: res.locals.user._id };
 
     // security check for total price

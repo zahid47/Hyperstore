@@ -2,6 +2,7 @@ import { array, number, object, string, TypeOf } from "zod";
 
 export const createOrderSchema = object({
   body: object({
+    storeId: string(),
     products: array(
       object({
         product: string({ required_error: "product id is required" }),
@@ -20,6 +21,7 @@ export const getOrdersSchema = object({
   query: object({
     limit: string().optional(),
     page: string().optional(),
+    storeId: string(),
   }),
 });
 
