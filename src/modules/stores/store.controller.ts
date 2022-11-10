@@ -24,11 +24,11 @@ export const createStoreController = async (
   next: NextFunction
 ) => {
   try {
-    const product = await createStore(req.body);
-    return res.status(201).json(product);
+    const store = await createStore(req.body);
+    return res.status(201).json(store);
   } catch (err: any) {
     log.error(err);
-    return next(createError(err.status, "product", err.message));
+    return next(createError(err.status, "store", err.message));
   }
 };
 
@@ -42,27 +42,27 @@ export const getStoreController = async (
 
     const cachedStore = await getRedis(id);
 
-    let product = null;
+    let store = null;
 
     if (cachedStore) {
-      product = JSON.parse(cachedStore);
+      store = JSON.parse(cachedStore);
     } else {
-      product = await findStore(id);
-      await setRedis(id, JSON.stringify(product));
+      store = await findStore(id);
+      await setRedis(id, JSON.stringify(store));
     }
 
-    if (!product)
+    if (!store)
       return next(
         createError(
           404,
-          "product",
-          JSON.stringify({ details: "product not found" })
+          "store",
+          JSON.stringify({ details: "store not found" })
         )
       );
-    return res.status(200).json(product);
+    return res.status(200).json(store);
   } catch (err: any) {
     log.error(err);
-    return next(createError(err.status, "product", err));
+    return next(createError(err.status, "store", err));
   }
 };
 
@@ -82,11 +82,11 @@ export const getStoresController = async (
       skip = limit * (parseInt(req.query.page) - 1);
     }
     const query = filterQueryBuilder(req.query);
-    const products = await findStores(query, limit, skip);
-    return res.status(200).json(products);
+    const stores = await findStores(query, limit, skip);
+    return res.status(200).json(stores);
   } catch (err: any) {
     log.error(err);
-    return next(createError(err.status, "product", err));
+    return next(createError(err.status, "store", err));
   }
 };
 
@@ -97,21 +97,21 @@ export const updateStoreController = async (
 ) => {
   try {
     const { id } = req.params;
-    const product = await findAndUpdateStore(id, req.body);
+    const store = await findAndUpdateStore(id, req.body);
 
-    if (!product)
+    if (!store)
       return next(
         createError(
           404,
-          "product",
-          JSON.stringify({ details: "product not found" })
+          "store",
+          JSON.stringify({ details: "store not found" })
         )
       );
 
-    return res.status(200).json(product);
+    return res.status(200).json(store);
   } catch (err: any) {
     log.error(err);
-    return next(createError(err.status, "product", err));
+    return next(createError(err.status, "store", err));
   }
 };
 
@@ -123,20 +123,20 @@ export const deleteStoreController = async (
   try {
     const { id } = req.params;
 
-    const product = await findAndDeleteStore(id);
+    const store = await findAndDeleteStore(id);
 
-    if (!product)
+    if (!store)
       return next(
         createError(
           404,
-          "product",
-          JSON.stringify({ details: "product not found" })
+          "store",
+          JSON.stringify({ details: "store not found" })
         )
       );
 
-    return res.status(200).json({ success: true, message: "product deleted" });
+    return res.status(200).json({ success: true, message: "store deleted" });
   } catch (err: any) {
     log.error(err);
-    return next(createError(err.status, "product", err));
+    return next(createError(err.status, "store", err));
   }
 };
