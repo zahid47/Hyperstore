@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, request, response } from "express";
 import {
   createStore,
   findStores,
@@ -17,6 +17,25 @@ import {
 } from "./store.schema";
 import createError from "../../utils/createError";
 import { getRedis, setRedis } from "../../utils/redis";
+import { getCloudinaryURL } from "../../utils/cloudinary";
+
+export const uploadFileController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return next(createError(400, "File not found"));
+    }
+    const url = await getCloudinaryURL(file);
+    return res.status(200).json({ url });
+  } catch (err: any) {
+    log.error(err);
+    return next(createError(err.status, "upload", err.message));
+  }
+};
 
 export const createStoreController = async (
   req: Request<{}, {}, createStoreInput["body"]>,

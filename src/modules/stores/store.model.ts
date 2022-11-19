@@ -4,7 +4,7 @@ import { storeDocument } from "./store.type";
 const storeSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    slug: { type: String, required: true },
+    slug: { type: String },
     description: String,
     logo: String,
     primaryColor: String,

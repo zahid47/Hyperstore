@@ -3,7 +3,6 @@ import { object, string, TypeOf } from "zod";
 export const createStoreSchema = object({
   body: object({
     name: string({ required_error: "store name is required" }),
-    slug: string({ required_error: "store slug is required" }),
     description: string().optional(),
     logo: string().optional(),
     primaryColor: string().optional(),

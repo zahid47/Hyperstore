@@ -5,6 +5,7 @@ import {
   getStoresController,
   getStoreController,
   updateStoreController,
+  uploadFileController,
 } from "./store.controller";
 import validate from "../../middlewares/validate";
 import protect from "../../middlewares/protect";
@@ -19,32 +20,29 @@ import multer from "multer";
 import fileFilter from "../../utils/fileFilter";
 
 const router = Router();
+
 const storage = multer.diskStorage({});
 const upload = multer({ storage, fileFilter });
 
-router
-  .route("/")
-  .post(
-    protect("admin"),
-    upload.array("images"),
-    validate(createStoreSchema),
-    createStoreController
-  )
-  .get(validate(getStoresSchema), getStoresController);
+router.route("/upload").post(upload.single("file"), uploadFileController);
 
 router
   .route("/:id")
   .get(validate(getStoreSchema), getStoreController)
   .put(
-    protect("admin"),
-    upload.array("images"),
+    protect("user"),
     validate(updateStoreSchema),
     updateStoreController
   )
-  .delete(
-    protect("admin"),
-    validate(deleteStoreSchema),
-    deleteStoreController
-  );
+  .delete(protect("user"), validate(deleteStoreSchema), deleteStoreController);
+
+router
+  .route("/")
+  .post(
+    protect("user"),
+    validate(createStoreSchema),
+    createStoreController
+  )
+  .get(validate(getStoresSchema), getStoresController);
 
 export default router;
