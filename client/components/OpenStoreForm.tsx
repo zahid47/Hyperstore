@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 import { useState, MouseEvent } from "react";
 import axios from "../utils/axios";
 
@@ -11,42 +12,38 @@ interface StoreType {
 
 export default function OpenStoreForm() {
   const [store, setStore] = useState<StoreType>();
+  const router = useRouter();
 
-  const uploadLogo = async (e: any) => {
-    // const file = e.target.files[0];
-    // const formData = new FormData();
-    // formData.append("file", file);
-    // const res = await axios.post("/store/upload", formData);
-    // console.log("🚀 ~ file: OpenStoreForm.tsx ~ line 18 ~ uploadLogo ~ res", res)
-    // setStore((prev: any) => {
-    //   const target = e.target as HTMLInputElement;
-    //   const image: File = (target.files as FileList)[0];
-    //   return { ...prev, logo: image };
-    // });
+  const uploadLogo = async (file: any) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await axios.post("/store/upload", formData);
+    return res.data?.url;
   };
 
   const createStore = async (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
-
-    const data = {
-      ...store,
-      logo: "https://e7.pngegg.com/pngimages/708/311/png-clipart-icon-logo-twitter-logo-twitter-logo-blue-social-media-thumbnail.png",
-    };
-
+    const logo = await uploadLogo(store?.logo);
     const accessToken = Cookies.get("accessToken");
-
-    const res = await axios.post("/store", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${accessToken}`,
+    const res = await axios.post(
+      "/store",
+      {
+        ...store,
+        logo,
       },
-    });
-    console.log(
-      "🚀 ~ file: OpenStoreForm.tsx ~ line 40 ~ OpenStoreForm ~ res",
-      res
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
+
+    if (res) {
+      return router.push(`/admin`);
+    }
   };
 
   return (
@@ -116,7 +113,13 @@ export default function OpenStoreForm() {
                   id="logo"
                   className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                   placeholder="Upload business logo"
-                  onChange={uploadLogo}
+                  onChange={(e) => {
+                    setStore((prev: any) => {
+                      const target = e.target as HTMLInputElement;
+                      const image: File = (target.files as FileList)[0];
+                      return { ...prev, logo: image };
+                    });
+                  }}
                 />
               </div>
             </div>

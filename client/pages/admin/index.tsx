@@ -15,7 +15,6 @@ export default function Admin({ orders, products }: any) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const accessToken = context.req.cookies.accessToken;
-
   const ordersResponse = await axios.get("/order", {
     headers: { Authorization: `Bearer ${accessToken}` },
   });

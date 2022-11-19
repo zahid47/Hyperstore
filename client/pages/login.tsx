@@ -18,10 +18,9 @@ export default function Login() {
     try {
       const response = await axios.post("/auth/login", creds);
       Cookies.set("accessToken", response.data.accessToken);
-      await router.push("/");
-      router.reload(); //FIXME: idk if this is the right way to do this
+      await router.push("/admin");
     } catch (err: any) {
-      console.log(err.response.data.message);
+      console.log(err);
       // setErrors(err.response.data.message);
     }
     setLoggingIn(false);
@@ -70,13 +69,6 @@ export default function Login() {
           <Link href={"/register"} passHref>
             <a className={styles.createlink}>Create One!</a>
           </Link>
-        </p>
-        <p className={styles.infotext}>FOR TESTING</p>
-        <p className={styles.infotext}>email: admin@test.com</p>
-        <p className={styles.infotext}>password: admin</p>
-        <p className={styles.infotext}>
-          (go to &apos;/admin&apos; after logging in, pls let me know if you
-          break anyting lol)
         </p>
       </div>
     </div>

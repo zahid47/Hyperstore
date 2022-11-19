@@ -40,6 +40,6 @@ app.use("/api/v1/store", store);
 app.use("/api/v1/product", product);
 app.use("/api/v1/order", order);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
