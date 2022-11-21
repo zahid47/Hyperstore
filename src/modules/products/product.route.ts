@@ -3,6 +3,7 @@ import {
   createProductController,
   deleteProductController,
   getProductsController,
+  getProductsBySlugController,
   getProductController,
   updateProductController,
 } from "./product.controller";
@@ -11,6 +12,7 @@ import protect from "../../middlewares/protect";
 import {
   createProductSchema,
   deleteProductSchema,
+  getProductsBySlugSchema,
   getProductSchema,
   getProductsSchema,
   updateProductSchema,
@@ -21,6 +23,10 @@ import fileFilter from "../../utils/fileFilter";
 const router = Router();
 const storage = multer.diskStorage({});
 const upload = multer({ storage, fileFilter });
+
+router
+  .route("/slug")
+  .get(validate(getProductsBySlugSchema), getProductsBySlugController);
 
 router
   .route("/")

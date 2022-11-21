@@ -18,6 +18,7 @@ import {
 import createError from "../../utils/createError";
 import { getRedis, setRedis } from "../../utils/redis";
 import { getCloudinaryURL } from "../../utils/cloudinary";
+import User from "../users/user.model";
 
 export const uploadFileController = async (
   req: Request,
@@ -44,6 +45,8 @@ export const createStoreController = async (
 ) => {
   try {
     const store = await createStore(req.body);
+    const userId = res.locals.user._id;
+    await User.findByIdAndUpdate(userId, { storeId: store._id });
     return res.status(201).json(store);
   } catch (err: any) {
     log.error(err);

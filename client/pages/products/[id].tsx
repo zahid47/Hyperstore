@@ -15,7 +15,7 @@ export default function SingleProduct({ product }: any) {
     const orderedProduct = {
       id: product._id,
       name: product.name,
-      price: product.prices.filter((p: any) => p.option === option)[0].price,
+      price: product.price,
       option: option,
       quantity: 1,
     };
@@ -37,7 +37,6 @@ export default function SingleProduct({ product }: any) {
         <p className={styles.desc}>
           {product.isVegan ? <>Vegan</> : <>Non-Vegan</>}
         </p>
-        {/* FIXME: dont hardcode the options */}
         <div onChange={(e: any) => setOption(e.target.value)}>
           <input type="radio" name="option" value="small" defaultChecked />{" "}
           <span className={styles.options}>Small</span>

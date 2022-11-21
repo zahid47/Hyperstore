@@ -11,14 +11,13 @@ interface userStateType {
   setUser: (user: userType) => void;
 }
 
+const userStore = (set: any) => ({
+  user: {},
+  setUser: (user: userType) => set((state: any) => ({ ...state, user })),
+});
+
 const useUserStore = create<userStateType>()(
-  devtools(
-    persist((set) => ({
-      user: {},
-      setUser: (user) => set(() => ({ user })),
-    })),
-    { name: "user" }
-  )
+  devtools(persist(userStore), { name: "user" })
 );
 
 export default useUserStore;

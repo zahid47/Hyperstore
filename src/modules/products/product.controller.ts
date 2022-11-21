@@ -12,6 +12,7 @@ import {
   createProductInput,
   deleteProductInput,
   getProductInput,
+  getProductsBySlugInput,
   getProductsInput,
   updateProductInput,
 } from "./product.schema";
@@ -73,6 +74,35 @@ export const getProductController = async (
 
 export const getProductsController = async (
   req: Request<{}, {}, {}, getProductsInput["query"]>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const storeId = req.query.storeId as string;
+    const store = await findStore(storeId);
+    if (!store)
+      return next(createError(404, "getting products", "Store not found"));
+
+    let limit = 10; //default limit 10
+    if (req.query.limit) {
+      limit = parseInt(req.query.limit);
+    }
+
+    let skip = 0; //default skip 0
+    if (req.query.page) {
+      skip = limit * (parseInt(req.query.page) - 1);
+    }
+    const query = filterQueryBuilder(req.query);
+    const products = await findProducts(query, store._id,  limit, skip);
+    return res.status(200).json(products);
+  } catch (err: any) {
+    log.error(err);
+    return next(createError(err.status, "product", err));
+  }
+};
+
+export const getProductsBySlugController = async (
+  req: Request<{}, {}, {}, getProductsBySlugInput["query"]>,
   res: Response,
   next: NextFunction
 ) => {

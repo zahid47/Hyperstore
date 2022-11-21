@@ -25,7 +25,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const store_slug = ctx.params?.store_slug;
 
   try {
-    const res = await axios.get(`/product?store_slug=${store_slug}`);
+    const res = await axios.get(`/product/slug?store_slug=${store_slug}`);
+    console.log("🚀 ~ res", res)
     if (res.data) {
       return {
         props: {
@@ -34,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       };
     }
   } catch {}
+
   return {
     props: {
       products: [],

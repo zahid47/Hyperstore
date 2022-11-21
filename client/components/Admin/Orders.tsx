@@ -3,15 +3,25 @@ import { MouseEvent, ChangeEvent, useState, useEffect } from "react";
 import axios from "../../utils/axios";
 import { io } from "socket.io-client";
 import styles from "../../styles/Admin.Orders.module.css";
+import useUserStore from "../../context/userStore";
 
-export default function OrdersTable({ orders }: { orders: any }) {
+export default function OrdersTable() {
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
-  const [ordersState, setOrdersState] = useState<any>(orders);
+  const [ordersState, setOrdersState] = useState<any>([]);
   const [deleting, setDeleting] = useState<boolean>(false);
+  const { user } = useUserStore();
 
   useEffect(() => {
-    setOrdersState(orders);
-  }, [orders]);
+    const fetchOrders = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const ordersResponse = await axios.get(`/order?storeId=${user.storeId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setOrdersState(ordersResponse.data);
+    };
+
+    fetchOrders();
+  }, []);
 
   useEffect(() => {
     socket.connect();
@@ -115,7 +125,6 @@ export default function OrdersTable({ orders }: { orders: any }) {
                     >
                       <option value="pending">pending</option>
                       <option value="confirmed">confirmed</option>
-                      <option value="cooking">cooking</option>
                       <option value="on the way">on the way</option>
                       <option value="delivered">delivered</option>
                       <option value="cancelled">cancelled</option>

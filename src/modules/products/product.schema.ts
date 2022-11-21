@@ -23,6 +23,16 @@ export const getProductsSchema = object({
     limit: string().optional(),
     page: string().optional(),
     searchTerm: string().optional(),
+    storeId: string({ required_error: "storeId is required" }),
+    // store_slug: string({ required_error: "store_slug is required" }),
+  }),
+});
+
+export const getProductsBySlugSchema = object({
+  query: object({
+    limit: string().optional(),
+    page: string().optional(),
+    searchTerm: string().optional(),
     store_slug: string({ required_error: "store_slug is required" }),
   }),
 });
@@ -58,6 +68,7 @@ export const deleteProductSchema = object({
 
 export type createProductInput = TypeOf<typeof createProductSchema>;
 export type getProductsInput = TypeOf<typeof getProductsSchema>;
+export type getProductsBySlugInput = TypeOf<typeof getProductsBySlugSchema>;
 export type getProductInput = TypeOf<typeof getProductSchema>;
 export type updateProductInput = TypeOf<typeof updateProductSchema>;
 export type deleteProductInput = TypeOf<typeof deleteProductSchema>;

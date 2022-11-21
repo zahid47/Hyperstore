@@ -3,16 +3,25 @@ import { useRouter } from "next/router";
 import { MouseEvent, useEffect, useState } from "react";
 import axios from "../../utils/axios";
 import styles from "../../styles/Admin.Products.module.css";
+import useUserStore from "../../context/userStore";
 
-export default function ProductsTable({ products }: { products: any }) {
-  const [productsState, setProductsState] = useState<any>(products);
+export default function ProductsTable() {
+  const [productsState, setProductsState] = useState<any>([]);
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();
+  const { user } = useUserStore();
 
-  //FIXME does this do anything? find out later! (also fix on other files)
   useEffect(() => {
-    setProductsState(products);
-  }, [products]);
+    const fetchProducts = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const productsResponse = await axios.get(`/product?storeId=${user.storeId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setProductsState(productsResponse.data);
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleEdit = (
     _e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
