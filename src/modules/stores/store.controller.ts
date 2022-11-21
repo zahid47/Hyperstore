@@ -46,7 +46,7 @@ export const createStoreController = async (
   try {
     const store = await createStore(req.body);
     const userId = res.locals.user._id;
-    await User.findByIdAndUpdate(userId, { storeId: store._id });
+    await User.findByIdAndUpdate(userId, { storeId: store._id, role: "admin" });
     return res.status(201).json(store);
   } catch (err: any) {
     log.error(err);
