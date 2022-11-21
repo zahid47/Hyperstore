@@ -258,7 +258,7 @@ export const managePaymentStatusController = async (
 
     return res
       .status(303)
-      .redirect(`${process.env.CLIENT_URL}/orders?success=true`);
+      .redirect(`${process.env.CLIENT_URL}/orders`);
   } catch (err: any) {
     log.error(err);
     return next(createError(err.status, "stripe", err));
