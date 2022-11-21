@@ -25,3 +25,14 @@ export const getCloudinaryURL = async (file: any) => {
   const { path } = file;
   return await cloudinaryUpload(path);
 };
+
+export const getCloudinaryURLs = async (files: any[]) => {
+  const imgURLs = [];
+  for (const file of files) {
+    const { path } = file;
+    const url = await cloudinaryUpload(path);
+    imgURLs.push(url);
+  }
+
+  return imgURLs;
+};

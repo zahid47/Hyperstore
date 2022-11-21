@@ -19,6 +19,8 @@ import {
 import createError from "../../utils/createError";
 import { getRedis, setRedis } from "../../utils/redis";
 import { findStore, findStoreBySlug } from "../stores/store.service";
+import { getCloudinaryURLs } from "../../utils/cloudinary";
+import productSerializer from "../../utils/productSerializer";
 
 export const createProductController = async (
   req: Request<{}, {}, createProductInput["body"]>,
@@ -26,11 +28,12 @@ export const createProductController = async (
   next: NextFunction
 ) => {
   try {
-    const store = await findStore(req.body.storeId);
-    if (!store)
-      return next(createError(404, "creating product", "Store not found"));
+    const files = req.files as any[];
+    let imgURLs: string[] = [];
+    if (files) imgURLs = (await getCloudinaryURLs(files)) as string[];
 
-    const product = await createProduct(req.body);
+    const newProduct = productSerializer(req.body, imgURLs);
+    const product = await createProduct(newProduct);
     return res.status(201).json(product);
   } catch (err: any) {
     log.error(err);
@@ -93,7 +96,7 @@ export const getProductsController = async (
       skip = limit * (parseInt(req.query.page) - 1);
     }
     const query = filterQueryBuilder(req.query);
-    const products = await findProducts(query, store._id,  limit, skip);
+    const products = await findProducts(query, store._id, limit, skip);
     return res.status(200).json(products);
   } catch (err: any) {
     log.error(err);
@@ -122,7 +125,7 @@ export const getProductsBySlugController = async (
       skip = limit * (parseInt(req.query.page) - 1);
     }
     const query = filterQueryBuilder(req.query);
-    const products = await findProducts(query, store._id,  limit, skip);
+    const products = await findProducts(query, store._id, limit, skip);
     return res.status(200).json(products);
   } catch (err: any) {
     log.error(err);
@@ -136,9 +139,15 @@ export const updateProductController = async (
   next: NextFunction
 ) => {
   try {
+    const files = req.files as any[];
+    let imgURLs: string[] = [];
+    if (files) imgURLs = (await getCloudinaryURLs(files)) as string[];
+
     const { id } = req.params;
 
-    const product = await findAndUpdateProduct(id, req.body);
+    const update = productSerializer(req.body, imgURLs);
+
+    const product = await findAndUpdateProduct(id, update);
 
     if (!product)
       return next(

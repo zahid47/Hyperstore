@@ -64,19 +64,13 @@ export default function NavBar() {
         <li>
           {user.name ? (
             <>
-              {!user.storeId && (
-                <>
-                  <Link href={"/cart"} passHref>
-                    <a className="rounded-lg px-3 py-2">
-                      Cart ({cartQty})
-                    </a>
-                  </Link>
+              <Link href={"/cart"} passHref>
+                <a className="rounded-lg px-3 py-2">Cart ({cartQty})</a>
+              </Link>
 
-                  <Link href={"/orders"} passHref>
-                    <a className="rounded-lg px-3 py-2">My Orders</a>
-                  </Link>
-                </>
-              )}
+              <Link href={"/orders"} passHref>
+                <a className="rounded-lg px-3 py-2">My Orders</a>
+              </Link>
 
               <button className="rounded-lg px-3 py-2" onClick={logOut}>
                 Log Out

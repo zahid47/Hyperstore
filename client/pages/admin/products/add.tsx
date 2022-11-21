@@ -3,10 +3,10 @@ import { useRouter } from "next/router";
 import { MouseEvent, useState } from "react";
 import axios from "../../../utils/axios";
 import styles from "../../../styles/Admin.add.module.css";
+import useUserStore from "../../../context/userStore";
 
 export default function Add() {
   const [product, setProduct] = useState<any>({
-    isVegan: false,
     prices: [
       { price: 999999, option: "small" },
       { price: 999999, option: "medium" },
@@ -15,6 +15,7 @@ export default function Add() {
   });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { user } = useUserStore();
 
   const handleAddNewProduct = async (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
@@ -23,12 +24,14 @@ export default function Add() {
 
     e.preventDefault();
 
+    const storeId = user.storeId!;
+
     const data = new FormData();
     data.append("name", product.name);
     data.append("prices", JSON.stringify(product.prices));
     data.append("description", product.description);
-    data.append("isVegan", product.isVegan);
     data.append("images", product.image);
+    data.append("storeId", storeId);
 
     const accessToken = Cookies.get("accessToken");
 
@@ -65,20 +68,6 @@ export default function Add() {
             setProduct({ ...product, description: e.target.value })
           }
         />
-
-        <div className={styles.checkbox}>
-          <input
-            type="checkbox"
-            className={styles.checkboxInput}
-            id="vegan"
-            onChange={(e) =>
-              setProduct({ ...product, isVegan: e.target.checked })
-            }
-          />
-          <label className={styles.checkboxLabel} htmlFor="vegan">
-            Vegan?
-          </label>
-        </div>
 
         <label htmlFor="images" className={styles.label}>
           Image

@@ -4,13 +4,13 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { MouseEvent, useState } from "react";
 import styles from "../../../../styles/Admin.edit.module.css";
+import useUserStore from "../../../../context/userStore";
 
 export default function Edit({ existingProduct }: any) {
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState<any>({
     name: existingProduct.name,
     description: existingProduct.description,
-    isVegan: existingProduct.isVegan,
     prices: [
       { price: existingProduct.prices[0].price, option: "small" },
       { price: existingProduct.prices[1].price, option: "medium" },
@@ -19,6 +19,7 @@ export default function Edit({ existingProduct }: any) {
   });
 
   const router = useRouter();
+  const { user } = useUserStore();
 
   const handleEditProduct = async (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
@@ -27,14 +28,16 @@ export default function Edit({ existingProduct }: any) {
 
     e.preventDefault();
 
+    const storeId = user.storeId!;
+
     const data = new FormData();
     data.append("name", product.name);
     data.append("prices", JSON.stringify(product.prices));
     data.append("description", product.description);
-    data.append("isVegan", product.isVegan);
     if (product.image) {
       data.append("images", product.image);
     }
+    data.append("storeId", storeId);
 
     const accessToken = Cookies.get("accessToken");
 
@@ -74,20 +77,6 @@ export default function Edit({ existingProduct }: any) {
             setProduct({ ...product, description: e.target.value })
           }
         />
-
-        <div className={styles.checkbox}>
-          <input
-            type="checkbox"
-            className={styles.checkboxInput}
-            id="vegan"
-            onChange={(e) =>
-              setProduct({ ...product, isVegan: e.target.checked })
-            }
-          />
-          <label className={styles.checkboxLabel} htmlFor="vegan">
-            Vegan?
-          </label>
-        </div>
 
         <label htmlFor="images" className={styles.label}>
           Image

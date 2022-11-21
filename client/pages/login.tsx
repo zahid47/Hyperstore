@@ -18,7 +18,7 @@ export default function Login() {
     try {
       const response = await axios.post("/auth/login", creds);
       Cookies.set("accessToken", response.data.accessToken);
-      await router.push("/admin");
+      window.location.href = "/";
     } catch (err: any) {
       console.log(err);
       // setErrors(err.response.data.message);
