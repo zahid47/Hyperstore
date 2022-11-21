@@ -3,21 +3,25 @@ import Items from "../../components/Items";
 import Search from "../../components/Search";
 import axios from "../../utils/axios";
 import { useState } from "react";
+import NavBarCustom from "../../components/NavBarCustom";
 
 const StorePage: NextPage = ({ products }: any) => {
   const [search, setSearch] = useState<string>("");
 
   return (
-    <div>
-      {products.length ? (
-        <>
-          <Search search={search} setSearch={setSearch} />
-          <Items products={products} search={search} />
-        </>
-      ) : (
-        <h1 className="text-2xl text-center">404 Store Not Found</h1>
-      )}
-    </div>
+    <>
+      <NavBarCustom />
+      <div>
+        {products.length ? (
+          <>
+            <Search search={search} setSearch={setSearch} />
+            <Items products={products} search={search} />
+          </>
+        ) : (
+          <h1 className="text-2xl text-center">404 Store Not Found</h1>
+        )}
+      </div>
+    </>
   );
 };
 
@@ -26,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     const res = await axios.get(`/product/slug?store_slug=${store_slug}`);
-    console.log("🚀 ~ res", res)
+    console.log("🚀 ~ res", res);
     if (res.data) {
       return {
         props: {

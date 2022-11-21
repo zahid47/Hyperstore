@@ -1,5 +1,4 @@
 import Footer from "./Footer";
-import NavBar from "./NavBar";
 import Head from "next/head";
 
 export default function Layout({ children }: { children: any }) {
@@ -13,7 +12,6 @@ export default function Layout({ children }: { children: any }) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar />
       <main>{children}</main>
       <Footer />
     </>

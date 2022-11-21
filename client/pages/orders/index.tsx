@@ -9,6 +9,7 @@ import useCartStore from "../../context/cartStore";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import useUserStore from "../../context/userStore";
+import NavBarCustom from "../../components/NavBarCustom";
 
 export default function Orders() {
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
@@ -56,53 +57,56 @@ export default function Orders() {
   }, [ordersState, socket]);
 
   return (
-    <div className={styles.container}>
-      {ordersState && ordersState.length <= 0 ? (
-        <p className={styles.noOrders}>You have no orders (yet!!)</p>
-      ) : (
-        <>
-          <table className={styles.table}>
-            <caption className={styles.caption}>Your Orders</caption>
-            <thead className={styles.thead}>
-              <tr>
-                <th className={styles.th}>Order ID</th>
-                <th className={styles.th}>Products</th>
-                <th className={styles.th}>Total</th>
-                <th className={styles.th}>Time</th>
-                <th className={styles.th}>Payment</th>
-                <th className={styles.th}>Status</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>
-              {ordersState &&
-                ordersState.reverse().map((order: any) => {
-                  return (
-                    <tr key={order._id}>
-                      <td className={styles.td}>{order._id}</td>
-                      <td className={styles.td}>
-                        {order.products.map((product: any) => {
-                          return (
-                            <p
-                              key={product._id}
-                            >{`${product.product.name} - ${product.option}`}</p>
-                          );
-                        })}
-                      </td>
-                      <td className={styles.td}>{order.total}</td>
-                      <td className={styles.td}>
-                        {dayjs(order.createdAt).fromNow()}
-                      </td>
-                      <td className={styles.td}>
-                        {order.payment.paymentStatus}
-                      </td>
-                      <td className={styles.td}>{order.status}</td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </>
-      )}
-    </div>
+    <>
+      <NavBarCustom />
+      <div className={styles.container}>
+        {ordersState && ordersState.length <= 0 ? (
+          <p className={styles.noOrders}>You have no orders (yet!!)</p>
+        ) : (
+          <>
+            <table className={styles.table}>
+              <caption className={styles.caption}>Your Orders</caption>
+              <thead className={styles.thead}>
+                <tr>
+                  <th className={styles.th}>Order ID</th>
+                  <th className={styles.th}>Products</th>
+                  <th className={styles.th}>Total</th>
+                  <th className={styles.th}>Time</th>
+                  <th className={styles.th}>Payment</th>
+                  <th className={styles.th}>Status</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tbody}>
+                {ordersState &&
+                  ordersState.reverse().map((order: any) => {
+                    return (
+                      <tr key={order._id}>
+                        <td className={styles.td}>{order._id}</td>
+                        <td className={styles.td}>
+                          {order.products.map((product: any) => {
+                            return (
+                              <p
+                                key={product._id}
+                              >{`${product.product.name} - ${product.option}`}</p>
+                            );
+                          })}
+                        </td>
+                        <td className={styles.td}>{order.total}</td>
+                        <td className={styles.td}>
+                          {dayjs(order.createdAt).fromNow()}
+                        </td>
+                        <td className={styles.td}>
+                          {order.payment.paymentStatus}
+                        </td>
+                        <td className={styles.td}>{order.status}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </>
+        )}
+      </div>
+    </>
   );
 }

@@ -8,12 +8,13 @@ import { useRouter } from "next/router";
 import useCartStore from "../context/cartStore";
 import useShopStore from "../context/shopStore";
 
-export default function NavBar() {
+export default function NavBarCustom() {
   const { user, setUser } = useUserStore();
   const { setShop } = useShopStore();
   const cartContent = useCartStore((state) => state.cartContent);
   const [cartQty, setCartQty] = useState(0);
   const router = useRouter();
+  const { shop } = useShopStore();
 
   useEffect(() => {
     setCartQty(
@@ -46,7 +47,6 @@ export default function NavBar() {
           description: response2.data.description,
           logo: response2.data.logo,
           primaryColor: response2.data.primaryColor,
-          slug: response2.data.slug,
         });
       } catch {
         Cookies.remove("accessToken");
@@ -67,9 +67,11 @@ export default function NavBar() {
     <nav className="mx-auto flex max-w-3xl items-center justify-between p-4">
       <Link
         className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100"
-        href="/"
+        href={`/store/${shop.slug}`}
       >
-        <a className="text-xl font-bold text-gray-700">Hyperstore</a>
+        <a className="text-xl font-bold text-gray-700">
+          <img src={shop.logo} className="h-10 w-10" alt="logo" />
+        </a>
       </Link>
 
       <ul className="flex items-center gap-2 text-sm font-medium text-gray-500">

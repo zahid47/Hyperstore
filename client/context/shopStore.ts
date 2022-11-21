@@ -6,6 +6,7 @@ interface shopType {
   description?: string;
   logo?: string;
   primaryColor?: string;
+  slug?: string;
 }
 
 interface shopStateType {

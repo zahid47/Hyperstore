@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { io } from "socket.io-client";
 import styles from "../styles/Cart.module.css";
 import useUserStore from "../context/userStore";
+import NavBarCustom from "../components/NavBarCustom";
+import useShopStore from "../context/shopStore";
 
 export default function Cart() {
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
@@ -117,73 +119,85 @@ export default function Cart() {
     }
   };
 
-  return (
-    <div className={styles.container}>
-      {cartContent && cartContent.length <= 0 ? (
-        <div className={styles.noitems}>Cart is empty</div>
-      ) : (
-        <>
-          <table className={styles.table}>
-            <caption className={styles.caption}>Your Cart</caption>
-            <thead className={styles.thead}>
-              <tr>
-                <th className={styles.th}>Name</th>
-                <th className={styles.th}>Option</th>
-                <th className={styles.th}>Quantity</th>
-                <th className={styles.th}>Price</th>
-                <th className={styles.th}>Remove</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>
-              {cartContent &&
-                cartContent.map((item: any) => (
-                  <tr key={`${item.option}-${item.id}`}>
-                    <td className={styles.td}>{item.name}</td>
-                    <td className={styles.td}>{item.option}</td>
-                    <td className={styles.td}>
-                      <button
-                        className={styles.qtyBtn}
-                        disabled={item.quantity < 2}
-                        onClick={(e) => {
-                          decrementQty(e, item);
-                        }}
-                      >
-                        -
-                      </button>
+  const { shop } = useShopStore();
 
-                      <div className={styles.qtyText}>{item.quantity}</div>
-                      <button
-                        className={styles.qtyBtn}
-                        onClick={(e) => incrementQty(e, item)}
-                      >
-                        +
-                      </button>
-                    </td>
-                    <td className={styles.td}>${item.price * item.quantity}</td>
-                    <td className={styles.td}>
-                      <button
-                        className={styles.removeBtn}
-                        onClick={(e) => handleDelete(e, item)}
-                      >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          <div className={styles.btnWrapper}>
-            <h1 className={styles.total}>Total: ${cartTotal}</h1>
-            <button
-              disabled={placingOrder}
-              className={styles.checkoutBtn}
-              onClick={handleOrder}
-            >
-              {placingOrder ? "Please Wait" : "Checkout"}
-            </button>
-          </div>
-        </>
-      )}
-    </div>
+  return (
+    <>
+      <NavBarCustom />
+      <div className={styles.container}>
+        {cartContent && cartContent.length <= 0 ? (
+          <div className={styles.noitems}>Cart is empty</div>
+        ) : (
+          <>
+            <table className={styles.table}>
+              <caption className={styles.caption}>Your Cart</caption>
+              <thead className={styles.thead}>
+                <tr>
+                  <th className={styles.th}>Name</th>
+                  <th className={styles.th}>Option</th>
+                  <th className={styles.th}>Quantity</th>
+                  <th className={styles.th}>Price</th>
+                  <th className={styles.th}>Remove</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tbody}>
+                {cartContent &&
+                  cartContent.map((item: any) => (
+                    <tr key={`${item.option}-${item.id}`}>
+                      <td className={styles.td}>{item.name}</td>
+                      <td className={styles.td}>{item.option}</td>
+                      <td className={styles.td}>
+                        <button
+                          className={styles.qtyBtn}
+                          disabled={item.quantity < 2}
+                          onClick={(e) => {
+                            decrementQty(e, item);
+                          }}
+                        >
+                          -
+                        </button>
+
+                        <div className={styles.qtyText}>{item.quantity}</div>
+                        <button
+                          className={styles.qtyBtn}
+                          onClick={(e) => incrementQty(e, item)}
+                        >
+                          +
+                        </button>
+                      </td>
+                      <td className={styles.td}>
+                        ${item.price * item.quantity}
+                      </td>
+                      <td className={styles.td}>
+                        <button
+                          className={styles.removeBtn}
+                          onClick={(e) => handleDelete(e, item)}
+                          style={{
+                            color: shop?.primaryColor,
+                            borderColor: shop?.primaryColor,
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+            <div className={styles.btnWrapper}>
+              <h1 className={styles.total}>Total: ${cartTotal}</h1>
+              <button
+                disabled={placingOrder}
+                className={styles.checkoutBtn}
+                style={{ backgroundColor: shop?.primaryColor }}
+                onClick={handleOrder}
+              >
+                {placingOrder ? "Please Wait" : "Checkout"}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 }

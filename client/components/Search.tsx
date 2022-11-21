@@ -1,6 +1,7 @@
 import styles from "../styles/Search.module.css";
 import axios from "../utils/axios";
 import { MouseEvent } from "react";
+import useShopStore from "../context/shopStore";
 
 export default function Search({ search, setSearch, setProducts }: any) {
   const handleSearch = async (
@@ -19,6 +20,8 @@ export default function Search({ search, setSearch, setProducts }: any) {
     }
   };
 
+  const { shop } = useShopStore();
+
   return (
     <div className={styles.container}>
       <form>
@@ -32,6 +35,7 @@ export default function Search({ search, setSearch, setProducts }: any) {
         />
         <button
           className={styles.searchBtn}
+          style={{ backgroundColor: shop?.primaryColor }}
           onClick={(e) => {
             handleSearch(e);
           }}
