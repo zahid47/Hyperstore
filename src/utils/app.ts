@@ -29,7 +29,7 @@ app.use(limiter);
 app.use(morgan("dev"));
 
 app.get("/", (_req: Request, res: Response) => {
-  return res.sendStatus(200);
+  return res.status(200).json({ message: "Welcome to Hyperstore API v2" });
 });
 
 //Routes
