@@ -14,7 +14,7 @@ export default function NavBarCustom() {
   const cartContent = useCartStore((state) => state.cartContent);
   const [cartQty, setCartQty] = useState(0);
   const router = useRouter();
-  const { shop } = useShopStore();
+  const [store, setStore] = useState<any>(null);
 
   useEffect(() => {
     setCartQty(
@@ -57,20 +57,34 @@ export default function NavBarCustom() {
     if (accessToken) getMe(accessToken);
   }, [setUser, setShop]);
 
+  useEffect(() => {
+    const getStore = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get(`/store/${user.storeId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setStore(response.data);
+    };
+
+    if (user.storeId) getStore();
+  }, [user.storeId]);
+
   const logOut = () => {
     Cookies.remove("accessToken");
     setUser({});
     router.push("/");
   };
 
+  if(!store) return null;
+
   return (
     <nav className="mx-auto flex max-w-3xl items-center justify-between p-4">
       <Link
         className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100"
-        href={`/store/${shop.slug}`}
+        href={`/${store?.slug}`}
       >
         <a className="text-xl font-bold text-gray-700">
-          <img src={shop.logo} className="h-10 w-10" alt="logo" />
+          <img src={store.logo} className="h-10 w-10" alt="logo" />
         </a>
       </Link>
 

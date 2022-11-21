@@ -25,7 +25,6 @@ export default function NavBar() {
 
   useEffect(() => {
     const accessToken = Cookies.get("accessToken");
-
     const getMe = async (accessToken: string) => {
       try {
         const response = await axios.get("/auth/me", {

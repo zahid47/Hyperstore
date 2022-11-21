@@ -1,11 +1,13 @@
 import { GetServerSideProps } from "next";
 import axios from "../../utils/axios";
 import Image from "next/image";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import useCartStore from "../../context/cartStore";
 import styles from "../../styles/Singleitem.module.css";
 import useShopStore from "../../context/shopStore";
 import NavBarCustom from "../../components/NavBarCustom";
+import Cookies from "js-cookie";
+import useUserStore from "../../context/userStore";
 
 export default function SingleProduct({ product }: any) {
   const [option, setOption] = useState<"small" | "medium" | "large">("small");
@@ -25,7 +27,20 @@ export default function SingleProduct({ product }: any) {
     alert("Added to cart");
   };
 
-  const { shop } = useShopStore();
+  const [store, setStore] = useState<any>(null);
+  const { user } = useUserStore();
+
+  useEffect(() => {
+    const getStore = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get(`/store/${user.storeId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setStore(response.data);
+    };
+
+    if (user.storeId) getStore();
+  }, [user.storeId]);
 
   return (
     <>
@@ -53,7 +68,7 @@ export default function SingleProduct({ product }: any) {
           </p>
           <button
             className={styles.addToCartBtn}
-            style={{ backgroundColor: shop?.primaryColor }}
+            style={{ backgroundColor: store?.primaryColor }}
             onClick={(e) => {
               handleAddToCart(e);
             }}

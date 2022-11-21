@@ -119,7 +119,19 @@ export default function Cart() {
     }
   };
 
-  const { shop } = useShopStore();
+  const [store, setStore] = useState<any>(null);
+
+  useEffect(() => {
+    const getStore = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get(`/store/${user.storeId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setStore(response.data);
+    };
+
+    if (user.storeId) getStore();
+  }, [user.storeId]);
 
   return (
     <>
@@ -173,8 +185,8 @@ export default function Cart() {
                           className={styles.removeBtn}
                           onClick={(e) => handleDelete(e, item)}
                           style={{
-                            color: shop?.primaryColor,
-                            borderColor: shop?.primaryColor,
+                            color: store?.primaryColor,
+                            borderColor: store?.primaryColor,
                           }}
                         >
                           Remove
@@ -189,7 +201,7 @@ export default function Cart() {
               <button
                 disabled={placingOrder}
                 className={styles.checkoutBtn}
-                style={{ backgroundColor: shop?.primaryColor }}
+                style={{ backgroundColor: store?.primaryColor }}
                 onClick={handleOrder}
               >
                 {placingOrder ? "Please Wait" : "Checkout"}

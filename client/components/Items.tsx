@@ -3,8 +3,6 @@ import Item from "./Item";
 import React from "react";
 
 const Items = ({ products }: any) => {
-  console.log(products);
-  
   return (
     <div className={styles.container}>
       {!products.length ? (

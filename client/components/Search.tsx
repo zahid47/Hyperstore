@@ -1,7 +1,9 @@
 import styles from "../styles/Search.module.css";
 import axios from "../utils/axios";
-import { MouseEvent } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import useShopStore from "../context/shopStore";
+import Cookies from "js-cookie";
+import useUserStore from "../context/userStore";
 
 export default function Search({ search, setSearch, setProducts }: any) {
   const handleSearch = async (
@@ -20,7 +22,20 @@ export default function Search({ search, setSearch, setProducts }: any) {
     }
   };
 
-  const { shop } = useShopStore();
+  const [store, setStore] = useState<any>(null);
+  const { user } = useUserStore();
+
+  useEffect(() => {
+    const getStore = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get(`/store/${user.storeId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setStore(response.data);
+    };
+
+    if (user.storeId) getStore();
+  }, [user.storeId]);
 
   return (
     <div className={styles.container}>
@@ -35,7 +50,7 @@ export default function Search({ search, setSearch, setProducts }: any) {
         />
         <button
           className={styles.searchBtn}
-          style={{ backgroundColor: shop?.primaryColor }}
+          style={{ backgroundColor: store?.primaryColor }}
           onClick={(e) => {
             handleSearch(e);
           }}
