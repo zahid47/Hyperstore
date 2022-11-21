@@ -47,9 +47,7 @@ export default function NavBarCustom() {
           logo: response2.data.logo,
           primaryColor: response2.data.primaryColor,
         });
-      } catch {
-        Cookies.remove("accessToken");
-      }
+      } catch {}
     };
 
     // skipcq

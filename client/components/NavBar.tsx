@@ -47,9 +47,7 @@ export default function NavBar() {
           primaryColor: response2.data.primaryColor,
           slug: response2.data.slug,
         });
-      } catch {
-        Cookies.remove("accessToken");
-      }
+      } catch {}
     };
 
     // skipcq

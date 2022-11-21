@@ -148,7 +148,7 @@ export default function OpenStoreForm() {
               className="block w-full rounded-lg bg-violet-700 px-5 py-3 text-sm font-medium text-white"
               onClick={createStore}
             >
-              Submit
+              Create store
             </button>
           </form>
         </div>
