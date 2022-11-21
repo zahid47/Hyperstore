@@ -6,9 +6,11 @@ import Cookies from "js-cookie";
 import axios from "../utils/axios";
 import { useRouter } from "next/router";
 import useCartStore from "../context/cartStore";
+import useShopStore from "../context/shopStore";
 
 export default function NavBar() {
   const { user, setUser } = useUserStore();
+  const { setShop } = useShopStore();
   const cartContent = useCartStore((state) => state.cartContent);
   const [cartQty, setCartQty] = useState(0);
   const router = useRouter();
@@ -34,8 +36,17 @@ export default function NavBar() {
           role: response.data.role,
           storeId: response.data.storeId || null,
         };
-
         setUser(user);
+
+        const response2 = await axios.get(`/store/${user.storeId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        setShop({
+          name: response2.data.name,
+          description: response2.data.description,
+          logo: response2.data.logo,
+          primaryColor: response2.data.primaryColor,
+        });
       } catch {
         Cookies.remove("accessToken");
       }
@@ -43,7 +54,7 @@ export default function NavBar() {
 
     // skipcq
     if (accessToken) getMe(accessToken);
-  }, [setUser]);
+  }, [setUser, setShop]);
 
   const logOut = () => {
     Cookies.remove("accessToken");
