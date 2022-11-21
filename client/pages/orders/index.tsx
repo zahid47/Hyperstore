@@ -1,5 +1,3 @@
-//TODO: add individual page for each order
-
 import axios from "../../utils/axios";
 import { GetServerSideProps } from "next";
 import { io } from "socket.io-client";
@@ -9,12 +7,15 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import useCartStore from "../../context/cartStore";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+import useUserStore from "../../context/userStore";
 
-export default function Orders({ orders }: any) {
+export default function Orders() {
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
-  const [ordersState, setOrdersState] = useState<any>(orders);
+  const [ordersState, setOrdersState] = useState<any>([]);
   const { clearCart } = useCartStore((state) => state);
   const router = useRouter();
+  const { user } = useUserStore();
   dayjs.extend(relativeTime);
 
   useEffect(() => {
@@ -24,8 +25,15 @@ export default function Orders({ orders }: any) {
   }, [clearCart, router.query.success]);
 
   useEffect(() => {
-    setOrdersState(orders);
-  }, [orders]);
+    const fetchOrders = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const res = await axios.get(`/user/orders?storeId=${user.storeId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setOrdersState(res.data);
+    };
+    fetchOrders();
+  }, []);
 
   useEffect(() => {
     socket.connect();
@@ -98,18 +106,3 @@ export default function Orders({ orders }: any) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const accessToken = context.req.cookies.accessToken;
-
-  const res = await axios.get("/user/orders", {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
-  const orders = res.data;
-
-  return {
-    props: {
-      orders,
-    },
-  };
-};

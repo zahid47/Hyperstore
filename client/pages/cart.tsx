@@ -5,11 +5,14 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { io } from "socket.io-client";
 import styles from "../styles/Cart.module.css";
+import useUserStore from "../context/userStore";
 
 export default function Cart() {
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
   const [placingOrder, setPlacingOrder] = useState(false);
   const router = useRouter();
+  const { user } = useUserStore();
+
   const {
     cartContent,
     addToCart,
@@ -71,6 +74,7 @@ export default function Cart() {
 
     if (!accessToken) {
       router.push("/login");
+      setPlacingOrder(false);
     } else {
       const products =
         cartContent &&
@@ -88,11 +92,16 @@ export default function Cart() {
           method: "card",
         },
         total: cartTotal,
+        storeId: user.storeId,
       };
 
-      const res = await axios.post("/order", orderDetails, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      const res = await axios.post(
+        `/order?storeId=${user.storeId}`,
+        orderDetails,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
       const order = res.data;
       socket.emit("newOrder", order);
 

@@ -15,7 +15,7 @@ export default function SingleProduct({ product }: any) {
     const orderedProduct = {
       id: product._id,
       name: product.name,
-      price: product.price,
+      price: product.prices.filter((p: any) => p.option === option)[0].price,
       option: option,
       quantity: 1,
     };
