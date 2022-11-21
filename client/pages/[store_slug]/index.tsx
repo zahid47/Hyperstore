@@ -2,11 +2,16 @@ import type { GetServerSideProps, NextPage } from "next";
 import Items from "../../components/Items";
 import Search from "../../components/Search";
 import axios from "../../utils/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBarCustom from "../../components/NavBarCustom";
 
-const StorePage: NextPage = ({ products }: any) => {
+const StorePage: NextPage = ({ data }: any) => {
   const [search, setSearch] = useState<string>("");
+  const [products, setProducts] = useState<any>(data);
+
+  useEffect(() => {
+    setProducts(data);
+  }, [data]);
 
   return (
     <>
@@ -14,8 +19,8 @@ const StorePage: NextPage = ({ products }: any) => {
       <div>
         {products.length ? (
           <>
-            <Search search={search} setSearch={setSearch} />
-            <Items products={products} search={search} />
+            <Search search={search} setSearch={setSearch} setProducts={setProducts} />
+            <Items products={products} />
           </>
         ) : (
           <h1 className="text-2xl text-center">404 Store Not Found</h1>
@@ -33,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if (res.data) {
       return {
         props: {
-          products: res.data,
+          data: res.data,
         },
       };
     }
@@ -41,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      products: [],
+      data: [],
     },
   };
 };

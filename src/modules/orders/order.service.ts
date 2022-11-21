@@ -29,9 +29,13 @@ export const findOrder = async (id: string) => {
   }
 };
 
-export const findOrders = async (limit: number, skip: number) => {
+export const findOrders = async (
+  limit: number,
+  skip: number,
+  storeId: string
+) => {
   try {
-    return await Order.find()
+    return await Order.find({ storeId: storeId })
       .limit(limit)
       .skip(skip)
       .populate("user", "name email phone address")

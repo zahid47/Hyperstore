@@ -88,7 +88,9 @@ export const getOrdersController = async (
       skip = limit * (parseInt(req.query.page) - 1);
     }
 
-    const orders = await findOrders(limit, skip);
+    const storeId = req.query.storeId as string;
+
+    const orders = await findOrders(limit, skip, storeId);
     return res.status(200).json(orders);
   } catch (err: any) {
     log.error(err);

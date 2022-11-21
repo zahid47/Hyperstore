@@ -6,17 +6,18 @@ import Cookies from "js-cookie";
 import useUserStore from "../context/userStore";
 
 export default function Search({ search, setSearch, setProducts }: any) {
+
   const handleSearch = async (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
 
     if (!search) {
-      const res = await axios.get(`/product?name=${search}`);
+      const res = await axios.get(`/product?name=${search}&storeId=${user.storeId}`);
       const data = res.data;
       setProducts(data);
     } else {
-      const res = await axios.get(`/product?name=${search}`);
+      const res = await axios.get(`/product?name=${search}&storeId=${user.storeId}`);
       const data = res.data;
       setProducts(data);
     }
