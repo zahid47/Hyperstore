@@ -1,5 +1,4 @@
 import Link from "next/link";
-import styles from "../styles/NavBar.module.css";
 import useUserStore from "../context/userStore";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -67,7 +66,7 @@ export default function NavBarCustom() {
     };
 
     if (user.storeId) getStore();
-  }, [user.storeId]);
+  }, []);
 
   const logOut = () => {
     Cookies.remove("accessToken");
@@ -75,47 +74,53 @@ export default function NavBarCustom() {
     router.push("/");
   };
 
-  if(!store) return null;
-
   return (
-    <nav className="mx-auto flex max-w-3xl items-center justify-between p-4">
-      <Link
-        className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100"
-        href={`/${store?.slug}`}
-      >
-        <a className="text-xl font-bold text-gray-700">
-          <img src={store.logo} className="h-10 w-10" alt="logo" />
-        </a>
-      </Link>
+    <>
+      {!!store && (
+        <>
+          (
+          <nav className="mx-auto flex max-w-3xl items-center justify-between p-4">
+            <Link
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100"
+              href={`/${store?.slug}`}
+            >
+              <a className="text-xl font-bold text-gray-700">
+                <img src={store?.logo} className="h-10 w-10" alt="logo" />
+              </a>
+            </Link>
 
-      <ul className="flex items-center gap-2 text-sm font-medium text-gray-500">
-        <li>
-          {user.name ? (
-            <>
-              <Link href={"/cart"} passHref>
-                <a className="rounded-lg px-3 py-2">Cart ({cartQty})</a>
-              </Link>
+            <ul className="flex items-center gap-2 text-sm font-medium text-gray-500">
+              <li>
+                {user.name ? (
+                  <>
+                    <Link href={"/cart"} passHref>
+                      <a className="rounded-lg px-3 py-2">Cart ({cartQty})</a>
+                    </Link>
 
-              <Link href={"/orders"} passHref>
-                <a className="rounded-lg px-3 py-2">My Orders</a>
-              </Link>
+                    <Link href={"/orders"} passHref>
+                      <a className="rounded-lg px-3 py-2">My Orders</a>
+                    </Link>
 
-              <button className="rounded-lg px-3 py-2" onClick={logOut}>
-                Log Out
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href={"/login"} passHref>
-                <a className="rounded-lg px-3 py-2">Login</a>
-              </Link>
-              <Link href={"/open-shop"} passHref>
-                <a className="rounded-lg px-3 py-2">Open a shop</a>
-              </Link>
-            </>
-          )}
-        </li>
-      </ul>
-    </nav>
+                    <button className="rounded-lg px-3 py-2" onClick={logOut}>
+                      Log Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href={"/login"} passHref>
+                      <a className="rounded-lg px-3 py-2">Login</a>
+                    </Link>
+                    <Link href={"/open-shop"} passHref>
+                      <a className="rounded-lg px-3 py-2">Open a shop</a>
+                    </Link>
+                  </>
+                )}
+              </li>
+            </ul>
+          </nav>
+          ){" "}
+        </>
+      )}
+    </>
   );
 }

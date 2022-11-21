@@ -30,7 +30,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     const res = await axios.get(`/product/slug?store_slug=${store_slug}`);
-    console.log("🚀 ~ res", res);
     if (res.data) {
       return {
         props: {

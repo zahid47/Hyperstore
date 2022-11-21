@@ -16,16 +16,11 @@ const Item = ({ item }: any) => {
       const response = await axios.get(`/store/${user.storeId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-      console.log("🚀 ~ response", response)
       setStore(response.data);
     };
 
     if (user.storeId) getStore();
   }, [user.storeId]);
-
-  // useEffect(() => {
-  //   console.log("🚀 ~ store", store)
-  // }, [store]);
 
   return (
     <Link href={`/products/${item._id}`}>
