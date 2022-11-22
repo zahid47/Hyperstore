@@ -8,7 +8,23 @@ import styles from "../styles/Item.module.css";
 
 const Item = ({ item }: any) => {
   const [store, setStore] = useState<any>(null);
-  const { user } = useUserStore();
+  const [user, setUser] = useState<any>({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get("/auth/me", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const user = {
+        name: response.data.name,
+        role: response.data.role,
+        storeId: response.data.storeId || null,
+      };
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const getStore = async () => {

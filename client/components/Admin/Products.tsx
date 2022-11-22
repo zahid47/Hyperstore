@@ -9,7 +9,23 @@ export default function ProductsTable() {
   const [productsState, setProductsState] = useState<any>([]);
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();
-  const { user } = useUserStore();
+  const [user, setUser] = useState<any>({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get("/auth/me", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const user = {
+        name: response.data.name,
+        role: response.data.role,
+        storeId: response.data.storeId || null,
+      };
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,8 +36,8 @@ export default function ProductsTable() {
       setProductsState(productsResponse.data);
     };
 
-    fetchProducts();
-  }, []);
+    if (user.storeId) fetchProducts();
+  }, [user.storeId]);
 
   const handleEdit = (
     _e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
@@ -55,7 +71,7 @@ export default function ProductsTable() {
   return (
     <>
       {productsState && productsState.length <= 0 ? (
-        <p className={styles.noItems}>No products (yet!!)</p>
+        <p className={styles.noItems}>No products found</p>
       ) : (
         <table className={styles.table}>
           <caption className={styles.caption}>Products</caption>

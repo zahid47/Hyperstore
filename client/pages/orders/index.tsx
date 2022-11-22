@@ -16,7 +16,23 @@ export default function Orders() {
   const [ordersState, setOrdersState] = useState<any>([]);
   const { clearCart } = useCartStore((state) => state);
   const router = useRouter();
-  const { user } = useUserStore();
+  const [user, setUser] = useState<any>({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get("/auth/me", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const user = {
+        name: response.data.name,
+        role: response.data.role,
+        storeId: response.data.storeId || null,
+      };
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
   dayjs.extend(relativeTime);
 
   useEffect(() => {
@@ -61,7 +77,7 @@ export default function Orders() {
       <NavBarCustom />
       <div className={styles.container}>
         {ordersState && ordersState.length <= 0 ? (
-          <p className={styles.noOrders}>You have no orders (yet!!)</p>
+          <p className={styles.noOrders}>You have no orders yet</p>
         ) : (
           <>
             <table className={styles.table}>

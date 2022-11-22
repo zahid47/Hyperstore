@@ -14,6 +14,25 @@ export default function NavBar() {
   const cartContent = useCartStore((state) => state.cartContent);
   const [cartQty, setCartQty] = useState(0);
   const router = useRouter();
+  const [store, setStore] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchStore = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const res = await axios.get(`/store/${user.storeId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setShop({
+        name: res.data.name,
+        description: res.data.description,
+        logo: res.data.logo,
+        primaryColor: res.data.primaryColor,
+        slug: res.data.slug,
+      });
+    };
+
+    if (user) fetchStore();
+  }, [user]);
 
   useEffect(() => {
     setCartQty(

@@ -13,7 +13,23 @@ export default function Cart() {
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
   const [placingOrder, setPlacingOrder] = useState(false);
   const router = useRouter();
-  const { user } = useUserStore();
+  const [user, setUser] = useState<any>({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get("/auth/me", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const user = {
+        name: response.data.name,
+        role: response.data.role,
+        storeId: response.data.storeId || null,
+      };
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   const {
     cartContent,

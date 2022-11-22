@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import axios from "../../../utils/axios";
 import styles from "../../../styles/Admin.add.module.css";
 import useUserStore from "../../../context/userStore";
@@ -15,7 +15,23 @@ export default function Add() {
   });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { user } = useUserStore();
+  const [user, setUser] = useState<any>({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get("/auth/me", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const user = {
+        name: response.data.name,
+        role: response.data.role,
+        storeId: response.data.storeId || null,
+      };
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   const handleAddNewProduct = async (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>

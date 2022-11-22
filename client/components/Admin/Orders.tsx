@@ -9,7 +9,23 @@ export default function OrdersTable() {
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
   const [ordersState, setOrdersState] = useState<any>([]);
   const [deleting, setDeleting] = useState<boolean>(false);
-  const { user } = useUserStore();
+  const [user, setUser] = useState<any>({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const accessToken = Cookies.get("accessToken");
+      const response = await axios.get("/auth/me", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const user = {
+        name: response.data.name,
+        role: response.data.role,
+        storeId: response.data.storeId || null,
+      };
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -20,8 +36,8 @@ export default function OrdersTable() {
       setOrdersState(ordersResponse.data);
     };
 
-    fetchOrders();
-  }, []);
+    if (user.storeId) fetchOrders();
+  }, [user.storeId]);
 
   useEffect(() => {
     socket.connect();
@@ -80,7 +96,7 @@ export default function OrdersTable() {
   return (
     <>
       {ordersState && ordersState.length <= 0 ? (
-        <p className={styles.noItems}>No orders (yet!!)</p>
+        <p className={styles.noItems}>No orders found</p>
       ) : (
         <table className={styles.table}>
           <caption className={styles.caption}>Orders</caption>

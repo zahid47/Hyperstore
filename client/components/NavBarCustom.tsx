@@ -64,7 +64,7 @@ export default function NavBarCustom() {
     };
 
     if (user.storeId) getStore();
-  }, []);
+  }, [user.storeId]);
 
   const logOut = () => {
     Cookies.remove("accessToken");
