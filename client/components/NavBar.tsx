@@ -100,6 +100,10 @@ export default function NavBar() {
                 <a className="rounded-lg px-3 py-2">My Orders</a>
               </Link>
 
+              <Link href={"/open-shop"} passHref>
+                <a className="rounded-lg px-3 py-2">Open a shop</a>
+              </Link>
+
               <button className="rounded-lg px-3 py-2" onClick={logOut}>
                 Log Out
               </button>
