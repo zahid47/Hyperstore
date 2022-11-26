@@ -5,6 +5,7 @@ import {
   findAndDeleteStore,
   findAndUpdateStore,
   findStore,
+  findStoreBySlug,
 } from "./store.service";
 import { filterQueryBuilder } from "../../utils/filterQueryBuilder";
 import log from "../../utils/logger";
@@ -72,6 +73,32 @@ export const getStoreController = async (
       store = await findStore(id);
       await setRedis(id, JSON.stringify(store));
     }
+
+    if (!store)
+      return next(
+        createError(
+          404,
+          "store",
+          JSON.stringify({ details: "store not found" })
+        )
+      );
+    return res.status(200).json(store);
+  } catch (err: any) {
+    log.error(err);
+    return next(createError(err.status, "store", err));
+  }
+};
+
+export const getStoreBySlugController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { slug } = req.query;
+
+    //@ts-ignore
+    const store = await findStoreBySlug(slug);
 
     if (!store)
       return next(
