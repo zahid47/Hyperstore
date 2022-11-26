@@ -109,7 +109,7 @@ export default function Add() {
             className={styles.price}
             type="number"
             id="small"
-            placeholder="small"
+            placeholder="option 1"
             onChange={(e) => {
               setProduct({
                 ...product,
@@ -125,7 +125,7 @@ export default function Add() {
             className={styles.price}
             type="number"
             id="medium"
-            placeholder="medium"
+            placeholder="option 2"
             onChange={(e) => {
               setProduct({
                 ...product,
@@ -141,7 +141,7 @@ export default function Add() {
             className={styles.price}
             type="number"
             id="large"
-            placeholder="large"
+            placeholder="option 3"
             onChange={(e) => {
               setProduct({
                 ...product,
