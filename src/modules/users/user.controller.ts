@@ -21,6 +21,7 @@ import createError from "../../utils/createError";
 import { verifyToken } from "../../utils/jwt";
 import log from "../../utils/logger";
 import { sendEmail } from "../../utils/sendEmail";
+import { findNewestStore } from "../stores/store.service";
 
 export const createUserController = async (
   req: Request<{}, {}, createUserInput["body"]>,
@@ -32,7 +33,14 @@ export const createUserController = async (
     if (isDuplicateEmail)
       return next(createError(409, "email", "email already exists"));
 
-    const user = await createUser(req.body);
+    // get the newest storeId from the database (temp workaround)
+    const store = await findNewestStore();
+
+    const user = await createUser({
+      ...req.body,
+      storeId: store?._id,
+    });
+    
     // if (process.env.NODE_ENV !== "test") {
     //   sendEmail(user.id, user.email, "VERIFY");
     // }

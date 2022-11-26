@@ -20,6 +20,15 @@ export const findStore = async (id: string) => {
   }
 };
 
+export const findNewestStore = async () => {
+  try {
+    return await Store.findOne().sort({ createdAt: -1 });
+    // skipcq
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
 export const findStoreBySlug = async (slug: string) => {
   try {
     return await Store.findOne({ slug: slug });
