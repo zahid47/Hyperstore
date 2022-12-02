@@ -76,7 +76,6 @@ export default function NavBarCustom() {
     <>
       {!!store && (
         <>
-          (
           <nav className="mx-auto flex max-w-3xl items-center justify-between p-4">
             <Link
               className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100"
@@ -116,7 +115,6 @@ export default function NavBarCustom() {
               </li>
             </ul>
           </nav>
-          ){" "}
         </>
       )}
     </>
