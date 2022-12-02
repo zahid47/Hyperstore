@@ -3,7 +3,7 @@ import { MouseEvent, ChangeEvent, useState, useEffect } from "react";
 import axios from "../../utils/axios";
 import { io } from "socket.io-client";
 import styles from "../../styles/Admin.Orders.module.css";
-import useUserStore from "../../context/userStore";
+import Stat from "./Stat";
 
 export default function OrdersTable() {
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL);
@@ -95,6 +95,7 @@ export default function OrdersTable() {
 
   return (
     <>
+      <Stat ordersState={ordersState} />
       {ordersState && ordersState.length <= 0 ? (
         <p className={styles.noItems}>No orders found</p>
       ) : (

@@ -2,7 +2,7 @@
   "name": "hyperstore-backend",
   "version": "0.0.1",
   "engines": {
-    "node": "16.x"
+    "node": "19.x"
   },
   "description": "hyperstore - e-commerce platform for small businesses",
   "main": "server.js",
